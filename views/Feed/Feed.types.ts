@@ -8,11 +8,14 @@ export type api = {
     getProfiles: () => Promise<profile.schema[]>
 }
 
-export type OinkProps = {
-    imageUrl: string,
-    text: string,
-    name: string,
+export type oinkProps = {
+    imageUrl: string | null;
+    text: string;
+    name: string;
+    date: Date;
+    embedImage: string | null;
 }
+
 
 export namespace phases {
     export type loading = {

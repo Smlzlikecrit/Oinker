@@ -1,16 +1,12 @@
-import { createStore, Provider } from '../Shell.store'
-import { faker } from '@faker-js/faker'
-import * as types from '../Shell.types'
-import { createMockOink } from '../../../schema/oink/tests/oink.mocks'
+import { createStore, Provider } from "../Shell.store";
+import { types as userTypes } from "../../../environments/api/user";
+import { API } from "../../../environments/api/user/tests";
 
-const mockPromise = <T extends object>(response: T): Promise<T> => new Promise((resolve) => {
-    setTimeout(() => resolve(response), 2000)
-})
-
-const API: types.api = {}
-
-export const MockContainer = (props: { children: JSX.Element }) => {
-    const { children } = props
-    const store = createStore(API)
-    return <Provider value={store}>{children}</Provider>
-}
+export const MockContainer = (props: {
+  children: JSX.Element;
+  transformApi?: (api: userTypes.api) => userTypes.api;
+}) => {
+  const { children, transformApi } = props;
+  const store = createStore(transformApi ? transformApi(API): API);
+  return <Provider value={store}>{children}</Provider>;
+};
