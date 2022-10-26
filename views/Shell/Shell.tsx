@@ -1,14 +1,8 @@
-import { useContext, FormEvent, useState } from "react";
 import { Dialog } from '@mui/material'
-import { useStore } from "zustand";
-import { context as userContext } from "../../environments/api/user";
-import { context } from "./Shell.store";
 
 import styled from "@emotion/styled";
 import { ArrowBack as ArrowIcon } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
-
-import * as types from "./Shell.types";
+import { IconButton, CircularProgress, TextField, Button } from "@mui/material";
 
 import {
   AccountCircle as PersonIcon,
@@ -21,6 +15,11 @@ import {
   BottomNavigation,
   BottomNavigationAction,
 } from "@mui/material";
+
+import { useData } from './Shell.useData'
+import * as types from "./Shell.types";
+import { Auth, Create, Email, Reset } from './Shell.components'
+
 
 const HeaderWrapper = styled.header`
   position: fixed;
@@ -69,6 +68,36 @@ const Main = styled.main`
   padding-top: 3.5rem;
 `;
 
+const LoadingWrap = styled.div`
+  padding-top: 10rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+const FormTitle = styled.h2`
+  font-size: 3rem;
+  margin: 1rem;
+  text-align: center;
+`
+
+const InputWrap = styled.div`
+  width: 100%;
+  padding: 0.5rem;
+`
+
+const Content = styled.form`
+  padding: 2rem;
+`
+
+const Modal = styled(Dialog)`
+  & .MuiPaper-root {
+    width: 100%;
+    max-width: 30rem;
+  }
+`
+
 const Header = (props: { title: string }) => {
   const { title } = props;
 
@@ -87,6 +116,12 @@ const Header = (props: { title: string }) => {
     </HeaderWrapper>
   );
 };
+
+const Actions = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem;
+`
 
 const Footer = (props: { active: types.active }) => {
   const { active } = props;
@@ -109,48 +144,26 @@ const Footer = (props: { active: types.active }) => {
     </FooterWrapper>
   );
 };
+
 export const Shell = (props: types.props) => {
   const { children, active, title } = props;
-  const store = useContext(context)
-  const phase = useStore(store, (state) => state.phase)
-
-  // const userStore = useContext(userContext);
-  // const userPhase = useStore(userStore, (state) => state.phase);
-  // const user = useStore(userStore, (state) => state.user);
-  // const signIn = useStore(userStore, (state) => state.actions.signIn);
-  // const signUp = useStore(userStore, (state) => state.actions.signUp);
-  // const signOut = useStore(userStore, (state) => state.actions.signOut);
-  
-
-  const dataFromSubmit = (event: FormEvent<HTMLFormElement>): Record<string, string> => {
-    event.preventDefault();
-    const form = event.target as HTMLFormElement;
-    if (!form) throw new Error("Form is required");
-    return Object.fromEntries(new FormData(form)) as any
-  }
-
+  const data = useData()
 
   return (
     <>
       <Wrapper>
         <Header title={title} />
         <Main>
-
-          <Dialog open={phase === 'creating-account'}>
-            <div>creating account</div>
-          </Dialog>
-
-          <Dialog open={phase === 'logging-in'}>
-            <div>logging in</div>
-          </Dialog>
-
-          <Dialog open={phase === 'request-password-reset'}>
-            <div>password reset</div>
-          </Dialog>
-          
-          {phase === 'logged-in' && children}
-          {phase === 'loading' && <div>Loading</div>}
-          
+        {data.phase === 'resetting' && <Reset />}
+        {data.phase === 'creating' && <Create />}
+        {data.phase === 'authenticating' && <Auth />}
+        {data.phase === 'emailed-confirm' || data.phase === 'emailed-reset' && <Email />}
+        {data.phase === 'accessed' && children}
+        {data.phase === 'loading' && (
+          <LoadingWrap>
+            <CircularProgress size={90} />
+          </LoadingWrap>
+        )}
         </Main>
         <Footer active={active} />
       </Wrapper>
@@ -159,43 +172,3 @@ export const Shell = (props: types.props) => {
 };
 
 export default Shell;
-
-/* <div style={{ padding: "2rem" }}>
-            {userPhase === "loading" && <div>Loading...</div>}
-
-            {alert && <div>{alert}</div>}
-
-            {userPhase === 'logged-in' && <div><button onClick={signOut}>SIGN OUT</button>{JSON.stringify(user, null, 2)}</div>}
-
-            {userPhase === "logged-out" && (
-              <div>
-                <div>SIGN IN</div>
-                <form
-                  onSubmit={async (event) => {
-                    const { email, password } = dataFromSubmit(event)
-                    const error = await signIn({ email, password })
-                    if (error) setAlert(error)
-                  }}
-                >
-                  <input name="email" placeholder="email"></input>
-                  <input name="password" type="password" placeholder="password"></input>
-                  <button type="submit">GO</button>
-                </form>
-
-                <div>CREATE ACCOUNT</div>
-                <form
-                  onSubmit={async (event) => {
-                    const { email, password } = dataFromSubmit(event)
-                    const error = await signUp({ email, password })
-                    if (error) setAlert(error)
-
-                    setModal(true)
-                  }}
-                >
-                  <input name="email" placeholder="email"></input>
-                  <input name="password" type="password" placeholder="password"></input>
-                  <button type="submit">GO</button>
-                </form>
-              </div>
-            )}
-          </div> */

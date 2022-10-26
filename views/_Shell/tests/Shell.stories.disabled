@@ -5,24 +5,16 @@ export default {
   title: "views/Shell",
 };
 
-export const Loading = () => (
-  <MockContainer transformApi={api => ({...api, getUser: () => new Promise(() => {})})}>
-    <Shell active="feed" title="Test">
-      <div>You have access to the app</div>
-    </Shell>
-  </MockContainer>
-);
-
 export const LoggedIn = () => (
   <MockContainer>
     <Shell active="feed" title="Test">
-      <div>You have access to the app</div>
+      <div>123</div>
     </Shell>
   </MockContainer>
 );
 
 export const LoggedOut = () => (
-  <MockContainer transformApi={api => ({...api, getUser: () => Promise.resolve(null) })}>
+  <MockContainer transformApi={api => ({...api, getUser: () => null })}>
     <Shell active="feed" title="Test">
       <div>123</div>
     </Shell>

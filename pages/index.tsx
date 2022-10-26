@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { Shell } from '../views/Shell'
+import { Shell } from '../views/_Shell'
 
 export const getStaticProps = async () => {
   return {

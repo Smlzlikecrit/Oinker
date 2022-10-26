@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import { useStore } from "zustand";
 import { context } from "./Feed.store";
 import { Oink, Placeholder } from "../../components/Oink";
-import { Shell } from "../Shell";
+import { Shell } from "../_Shell";
 
 const List = styled.ul`
   margin: 2rem 1rem 4rem 1rem;

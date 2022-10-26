@@ -24,5 +24,7 @@ export type api = {
     
     signOut: () => Promise<void>
     resetPassword: (props: {email: string}) => Promise<void>
+    resendResetPassword: (props: {email: string}) => Promise<void>
+    resendConfirmation: (props: { email: string }) => Promise<void>
     getUser: () => Promise<null | user>
 }

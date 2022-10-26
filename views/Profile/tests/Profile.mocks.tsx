@@ -1,7 +1,7 @@
 import faker from "@faker-js/faker";
 
 import * as types from "../Profile.types";
-import { types } from "../../../components/Oink";
+// import { types } from "../../../components/Oink";
 import { createMockOink } from "../../../schema/oink/tests/oink.mocks";
 import {
   createMockProfile,

@@ -4,7 +4,7 @@ import { useStore } from "zustand";
 import { Typography } from "@mui/material";
 
 import { Oink, Placeholder } from "../../components/Oink";
-import { Shell } from "../Shell";
+import { Shell } from "../_Shell";
 import { context } from "./Profile.store";
 
 const CoverImage = styled.img`
